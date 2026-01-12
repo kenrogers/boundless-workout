@@ -74,6 +74,16 @@ Open your AI coding tool and say:
 
 The system will guide you from there.
 
+### Automated Setup (Amp/Claude Users)
+
+If you're using Amp or Claude with [Playwright MCP](https://github.com/anthropics/anthropic-cookbook/tree/main/misc/mcp_playwright), you can automate the entire installation:
+
+```
+install app
+```
+
+The AI will walk through setup automatically—creating your Clerk app, Convex project, configuring webhooks, enabling billing, and testing everything works.
+
 ---
 
 ## The `/work` Workflow
