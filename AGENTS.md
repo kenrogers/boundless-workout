@@ -61,13 +61,18 @@ Project planning and execution uses the **Get Shit Done (GSD)** system.
 ┌─────────────────────────────────────────────────────────────┐
 │                        /work                                │
 ├─────────────────────────────────────────────────────────────┤
-│  1. LEARN    - Auto-check lessons for relevant learnings    │
-│  2. DO       - Route to appropriate GSD action              │
-│  3. CAPTURE  - Prompt for retrospective when done           │
+│  1. LEARN    - Auto-check lessons + Librarian research      │
+│  2. REVIEW   - Oracle reviews plan before execution         │
+│  3. DO       - Route to GSD (Oracle debugs, Librarian helps)│
+│  4. CAPTURE  - Oracle synthesizes retrospective insights    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 That's it. Just say `/work` and the system handles the rest.
+
+**Intelligent Tool Usage:**
+- **Oracle** (GPT-5): Reviews plans, debugs failures, synthesizes learnings
+- **Librarian**: Researches OSS patterns, finds implementation examples
 
 ### All Commands (for manual control)
 

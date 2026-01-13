@@ -1,16 +1,16 @@
 # GSD: Work Session
 
 **name**: gsd/work
-**description**: Unified workflow loop that combines lessons and GSD into a single command. Use at the start of any work session. Automatically checks for relevant learnings, routes to the right GSD action, and prompts for retrospective when work completes. Triggers include "work", "start working", "let's work", "begin session", "work session".
+**description**: Unified workflow loop that combines lessons, Oracle planning, Librarian research, and GSD into a single command. Use at the start of any work session. Automatically checks for relevant learnings, leverages Oracle for planning/debugging and Librarian for research, routes to the right GSD action, and prompts for retrospective when work completes. Triggers include "work", "start working", "let's work", "begin session", "work session".
 
 ---
 
 ## Purpose
 
-Single entry point for the complete developer workflow. Eliminates the need to remember multiple commands by wrapping everything into one loop:
+Single entry point for the complete developer workflow. Eliminates the need to remember multiple commands by wrapping everything into one intelligent loop:
 
 ```
-/work = /advise → /gsd → /retrospective
+/work = /advise → Oracle Review → /gsd (with Librarian research) → Oracle Retrospective
 ```
 
 ## The Work Loop
@@ -24,27 +24,93 @@ Single entry point for the complete developer workflow. Eliminates the need to r
 ║  │  1. LEARN FROM PAST                                     │ ║
 ║  │     Scan .agents/skills/lessons/ for relevant learnings │ ║
 ║  │     Apply proven patterns, avoid documented pitfalls    │ ║
+║  │     🔮 Librarian: Research similar OSS patterns         │ ║
 ║  └────────────────────────┬────────────────────────────────┘ ║
 ║                           ▼                                  ║
 ║  ┌─────────────────────────────────────────────────────────┐ ║
-║  │  2. DO THE WORK (GSD Loop)                              │ ║
+║  │  2. PLAN WITH ORACLE                                    │ ║
+║  │     Before execution, Oracle reviews plan quality       │ ║
+║  │     Catches architectural issues, missing edge cases    │ ║
+║  └────────────────────────┬────────────────────────────────┘ ║
+║                           ▼                                  ║
+║  ┌─────────────────────────────────────────────────────────┐ ║
+║  │  3. DO THE WORK (GSD Loop)                              │ ║
 ║  │     progress → plan → execute → progress                │ ║
+║  │     🔮 Oracle: Debug failures, review complex changes   │ ║
+║  │     📚 Librarian: Research APIs, find implementations   │ ║
 ║  │     Repeat until phase/session complete                 │ ║
 ║  └────────────────────────┬────────────────────────────────┘ ║
 ║                           ▼                                  ║
 ║  ┌─────────────────────────────────────────────────────────┐ ║
-║  │  3. CAPTURE LEARNINGS                                   │ ║
+║  │  4. CAPTURE LEARNINGS                                   │ ║
+║  │     🔮 Oracle: Synthesize insights from session         │ ║
 ║  │     Create retrospective lesson for future sessions     │ ║
 ║  └─────────────────────────────────────────────────────────┘ ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
+## Oracle & Librarian Integration
+
+### When to Use Oracle (GPT-5 Reasoning)
+
+| Trigger | Action |
+|---------|--------|
+| **Plan created** | Review plan for quality, missing edge cases, architectural issues |
+| **Test failures** | Debug with full context of failing tests and related files |
+| **Complex multi-file changes** | Get architecture guidance before making changes |
+| **Stuck > 2 attempts** | Ask Oracle for debugging help with accumulated context |
+| **Retrospective** | Synthesize session learnings into actionable insights |
+
+**Oracle Invocation Pattern:**
+```
+"I'm going to consult the Oracle to [review this plan / debug this failure / analyze this architecture]..."
+```
+
+### When to Use Librarian (Multi-Repo Research)
+
+| Trigger | Action |
+|---------|--------|
+| **New external library** | "How does [library] handle [pattern]?" |
+| **Unfamiliar API** | Research implementation patterns in library source |
+| **Architecture question** | "How does [OSS project] structure their [feature]?" |
+| **Best practices** | Find battle-tested patterns from established projects |
+
+**Librarian Invocation Pattern:**
+```
+"I'm going to ask the Librarian to research how [project] implements [feature]..."
+```
+
+### Decision Matrix
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  WHICH TOOL TO USE?                                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  Need to PLAN or DEBUG?                                     │
+│  ├─ Yes → Use ORACLE                                        │
+│  │        (reviews, analyzes, reasons about YOUR code)      │
+│  │                                                          │
+│  Need to RESEARCH external code?                            │
+│  ├─ Yes → Use LIBRARIAN                                     │
+│  │        (reads GitHub repos, finds patterns, explains)    │
+│  │                                                          │
+│  Need to SEARCH local codebase?                             │
+│  ├─ Yes → Use finder/Grep                                   │
+│  │        (fast local search)                               │
+│  │                                                          │
+│  Need to READ docs online?                                  │
+│  └─ Yes → Use web_search/read_web_page                      │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
 ## Workflow
 
-### Phase 1: Learn From Past (Advise)
+### Phase 1: Learn From Past (Advise + Librarian)
 
-Before any work begins, automatically search for relevant lessons:
+Before any work begins, automatically search for relevant lessons and research patterns:
 
 ```
 1. Determine Work Context
@@ -52,15 +118,21 @@ Before any work begins, automatically search for relevant lessons:
    ├─ If new project: Note the project type/domain
    └─ Identify key technologies and patterns involved
 
-2. Search Lessons
+2. Search Local Lessons
    ├─ Scan .agents/skills/lessons/*/SKILL.md
    ├─ Match description fields against current context
    └─ Extract relevant learnings
 
-3. Present Findings (if any)
+3. Research External Patterns (Librarian) - Optional
+   ├─ If working with unfamiliar library/framework
+   ├─ Ask Librarian: "How does [library] implement [pattern]?"
+   └─ Extract best practices from established OSS projects
+
+4. Present Findings (if any)
    ├─ What worked in similar past work
    ├─ What to avoid (documented failures)
-   └─ Specific parameters or approaches that succeeded
+   ├─ Specific parameters or approaches that succeeded
+   └─ Patterns from OSS projects (if researched)
 ```
 
 **Output Format:**
@@ -87,7 +159,50 @@ If no relevant lessons found:
    (Tip: Run /retrospective after completing work to build your lessons library)
 ```
 
-### Phase 2: Do The Work (GSD)
+### Phase 2: Plan with Oracle Review
+
+Before executing any plan, have Oracle review it for quality:
+
+```
+1. Check if PLAN.md exists for current phase
+   ├─ If no plan → Create plan first (gsd/plan-phase)
+   └─ If plan exists → Proceed to review
+
+2. Oracle Plan Review
+   ├─ Pass PLAN.md and relevant context files to Oracle
+   ├─ Ask: "Review this plan for quality, missing edge cases, and architectural issues"
+   └─ Oracle identifies potential problems BEFORE execution
+
+3. Present Review Findings
+   ├─ Architectural concerns
+   ├─ Missing edge cases
+   ├─ Suggested improvements
+   └─ Risk assessment
+```
+
+**Oracle Review Output:**
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║  🔮 ORACLE PLAN REVIEW                                       ║
+╠══════════════════════════════════════════════════════════════╣
+║  Plan: Phase 03 - Authentication System                      ║
+║                                                              ║
+║  ✅ Strengths:                                               ║
+║  • Good separation of concerns                               ║
+║  • Proper use of Clerk patterns                              ║
+║                                                              ║
+║  ⚠️  Concerns:                                               ║
+║  • Missing rate limiting on auth endpoints                   ║
+║  • No error handling for webhook failures                    ║
+║                                                              ║
+║  💡 Suggestions:                                             ║
+║  • Add task for rate limiting middleware                     ║
+║  • Include webhook retry logic                               ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
+### Phase 3: Do The Work (GSD)
 
 Route to appropriate GSD action based on project state:
 
@@ -97,7 +212,25 @@ Check Project State
 ├─ No ROADMAP.md → Load gsd/create-roadmap  
 ├─ No PLAN.md for current phase → Load gsd/plan-phase
 ├─ Has PLAN.md, not complete → Load gsd/execute-plan
-└─ All phases complete → Phase 3 (retrospective)
+└─ All phases complete → Phase 4 (retrospective)
+```
+
+#### Execution-Time Tool Triggers
+
+During execution, automatically invoke Oracle or Librarian when:
+
+```
+ORACLE TRIGGERS:
+├─ Test fails 2+ times → "Consulting Oracle to debug this failure..."
+├─ TypeScript errors persist → "Asking Oracle to analyze these type errors..."
+├─ Complex multi-file change → "Having Oracle review this architecture..."
+└─ Stuck on implementation → "Let me consult the Oracle for guidance..."
+
+LIBRARIAN TRIGGERS:
+├─ Using new npm package → "Asking Librarian how [package] works..."
+├─ Implementing unfamiliar pattern → "Researching how [project] does this..."
+├─ API integration → "Having Librarian find examples of [API] usage..."
+└─ Best practice question → "Checking how established projects handle this..."
 ```
 
 #### CRITICAL: Atomic Commits
@@ -151,7 +284,7 @@ Example: feat: add user authentication with Clerk
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
-### Phase 3: Capture Learnings (Retrospective)
+### Phase 4: Capture Learnings (Oracle-Enhanced Retrospective)
 
 Triggered when:
 - Phase completes successfully
@@ -171,29 +304,62 @@ Triggered when:
 ║  📝 CAPTURE LEARNINGS?                                       ║
 ║                                                              ║
 ║  Would you like to create a lesson from this work?           ║
-║  This helps future sessions avoid pitfalls and reuse         ║
-║  what worked.                                                ║
+║  Oracle will synthesize insights from the session.           ║
 ║                                                              ║
 ║  Options:                                                    ║
-║  • "yes" - Create lesson (recommended)                       ║
+║  • "yes" - Create lesson with Oracle synthesis (recommended) ║
 ║  • "skip" - Continue without capturing                       ║
 ║  • "continue" - Move to next phase                           ║
 ╚══════════════════════════════════════════════════════════════╝
 ```
 
-**If user says yes, create lesson:**
+**If user says yes, use Oracle to synthesize:**
 
 ```
+1. Gather Session Context
+   ├─ Read STATE.md for decisions made
+   ├─ Review git log for commits in this phase
+   ├─ Collect any error messages encountered
+   └─ Note which approaches worked/failed
+
+2. Oracle Synthesis
+   ├─ Pass full session context to Oracle
+   ├─ Ask: "Analyze this work session and extract actionable insights"
+   └─ Oracle produces structured learnings
+
+3. Create Lesson
+   ├─ .agents/skills/lessons/[phase-name]/SKILL.md
+   └─ Include Oracle's synthesized insights
+```
+
+**Oracle Synthesis Output:**
+
+```
+╔══════════════════════════════════════════════════════════════╗
+║  🔮 ORACLE SESSION ANALYSIS                                  ║
+╠══════════════════════════════════════════════════════════════╣
+║  Session: Phase 04 - Task Workflows                          ║
+║                                                              ║
+║  📈 What Worked:                                             ║
+║  • Using Convex indexes for query performance                ║
+║  • Breaking state updates into smaller mutations             ║
+║                                                              ║
+║  📉 What Failed:                                             ║
+║  • Initial approach without optimistic updates (slow UX)     ║
+║  • First schema design missed edge cases                     ║
+║                                                              ║
+║  💡 Key Insights:                                            ║
+║  • Always design indexes before writing queries              ║
+║  • Test with realistic data volumes early                    ║
+║                                                              ║
+║  🎯 Actionable for Next Time:                                ║
+║  • Start with data model, not UI                             ║
+║  • Add loading states from the beginning                     ║
+╚══════════════════════════════════════════════════════════════╝
+
 Creating lesson: .agents/skills/lessons/phase-04-task-workflows/
 
-Capturing:
-• What worked: [from session]
-• What failed: [from session]  
-• Key decisions: [from STATE.md]
-• Exact parameters: [from commits]
-• Lessons learned: [synthesized]
-
-✓ Lesson created!
+✓ Lesson created with Oracle-synthesized insights!
 ```
 
 ## Process Steps
@@ -302,16 +468,6 @@ If user agrees, create lesson in `.agents/skills/lessons/[descriptive-name]/SKIL
 - Route to GSD action automatically
 - Only prompt for retrospective on phase completion
 
-## Quick Commands During Session
-
-| Command | Action |
-|---------|--------|
-| "continue" | Proceed with suggested action |
-| "lessons" | Show applied learnings again |
-| "status" | Show current progress dashboard |
-| "done" | End session, trigger retrospective |
-| "skip lesson" | Continue without capturing |
-
 ## Example Full Session
 
 ```
@@ -329,6 +485,18 @@ Agent: 🔧 Starting work session...
        ║  • Use v.optional() for nullable fields                  ║
        ╚══════════════════════════════════════════════════════════╝
        
+       I'm going to ask the Librarian about Convex patterns for 
+       this type of feature...
+       
+       ╔══════════════════════════════════════════════════════════╗
+       ║  📚 LIBRARIAN RESEARCH                                   ║
+       ╠══════════════════════════════════════════════════════════╣
+       ║  Query: "How does Convex handle optimistic updates?"     ║
+       ║  Source: convex-dev/convex-helpers                       ║
+       ║  • Use useOptimisticMutation hook                        ║
+       ║  • Return optimistic data shape from mutation            ║
+       ╚══════════════════════════════════════════════════════════╝
+       
        Checking project state...
        
        ╔══════════════════════════════════════════════════════════╗
@@ -340,27 +508,52 @@ Agent: 🔧 Starting work session...
        ║  Current: Phase 02 - Core Features                       ║
        ║  Status:  📋 Planned (ready to execute)                  ║
        ╠══════════════════════════════════════════════════════════╣
-       ║  Next Action: Execute Phase 02 Plan                      ║
+       ║  Next Action: Oracle Plan Review → Execute Phase 02      ║
        ╚══════════════════════════════════════════════════════════╝
        
-       Ready to execute? Say "continue" or ask questions.
+       I'm going to consult the Oracle to review this plan...
+       
+       ╔══════════════════════════════════════════════════════════╗
+       ║  🔮 ORACLE PLAN REVIEW                                   ║
+       ╠══════════════════════════════════════════════════════════╣
+       ║  Plan: Phase 02 - Core Features                          ║
+       ║                                                          ║
+       ║  ✅ Strengths: Good task breakdown, proper atomicity     ║
+       ║  ⚠️  Concern: No loading state handling in Task 3        ║
+       ║  💡 Suggestion: Add error boundary to UI integration     ║
+       ╚══════════════════════════════════════════════════════════╝
+       
+       Ready to execute with these insights? Say "continue".
 
 User: continue
 
 Agent: Executing Task 1: Add core feature component...
        ✓ Component created
-       ✓ Verification passed (npm run typecheck)
+       ✓ Verification passed (npx tsc --noEmit)
        ✓ Committed: abc1234 "feat: add core feature component"
        
        Executing Task 2: Implement data layer...
-       ✓ Schema updated
-       ✓ Verification passed (npm run typecheck)
+       ✗ TypeScript error: Property 'createdAt' does not exist
+       
+       Consulting Oracle to debug this type error...
+       
+       ╔══════════════════════════════════════════════════════════╗
+       ║  🔮 ORACLE DEBUG                                         ║
+       ╠══════════════════════════════════════════════════════════╣
+       ║  Issue: Missing _creationTime in return type             ║
+       ║  Fix: Use Convex system field _creationTime, not custom  ║
+       ╚══════════════════════════════════════════════════════════╝
+       
+       Applying fix...
+       ✓ Schema updated with correct field
+       ✓ Verification passed (npx tsc --noEmit)
        ✓ Committed: def5678 "feat: implement feature data layer"
        
        Executing Task 3: Add UI integration...
-       ✓ Pages connected
-       ✓ Verification passed (npm run typecheck)
-       ✓ Committed: ghi9012 "feat: integrate feature UI"
+       (Applying Oracle suggestion: adding error boundary)
+       ✓ Pages connected with error handling
+       ✓ Verification passed (npx tsc --noEmit)
+       ✓ Committed: ghi9012 "feat: integrate feature UI with error boundary"
        
        Creating SUMMARY.md...
        ✓ Committed: jkl3456 "docs: complete phase 02 plan"
@@ -371,25 +564,31 @@ Agent: Executing Task 1: Add core feature component...
        ║  📝 CAPTURE LEARNINGS?                                   ║
        ╠══════════════════════════════════════════════════════════╣
        ║  Would you like to create a lesson from this work?       ║
-       ║  • "yes" - Create lesson                                 ║
+       ║  Oracle will synthesize insights from the session.       ║
+       ║  • "yes" - Create lesson with Oracle synthesis           ║
        ║  • "skip" - Continue to next phase                       ║
        ╚══════════════════════════════════════════════════════════╝
 
 User: yes
 
-Agent: What were the key learnings from this phase?
-       (Or I can synthesize from the session - say "auto")
-
-User: auto
-
-Agent: Creating lesson from session...
+Agent: I'm going to consult the Oracle to synthesize learnings...
+       
+       ╔══════════════════════════════════════════════════════════╗
+       ║  🔮 ORACLE SESSION ANALYSIS                              ║
+       ╠══════════════════════════════════════════════════════════╣
+       ║  📈 What Worked:                                         ║
+       ║  • Atomic commits kept changes reversible                ║
+       ║  • Oracle pre-review caught error boundary gap           ║
+       ║                                                          ║
+       ║  📉 What Failed:                                         ║
+       ║  • Used custom createdAt instead of _creationTime        ║
+       ║                                                          ║
+       ║  🎯 Actionable:                                          ║
+       ║  • Always use Convex system fields when available        ║
+       ║  • Add error boundaries proactively, not reactively      ║
+       ╚══════════════════════════════════════════════════════════╝
        
        ✓ Created: .agents/skills/lessons/phase-02-core-features/SKILL.md
-       
-       Captured:
-       • What worked: Query patterns with proper indexing
-       • What failed: Initial attempt without created_at index
-       • Key insight: Always plan indexes before writing queries
        
        Continue to Phase 03? Say "continue" or "/work" to start fresh.
 ```
@@ -398,9 +597,25 @@ Agent: Creating lesson from session...
 
 1. **Single Command**: No need to remember `/advise`, `/gsd`, `/progress`, `/retrospective`
 2. **Automatic Context**: Lessons applied automatically based on current work
-3. **Continuous Improvement**: Each session builds the lessons library
-4. **No Lost Learnings**: Prompted to capture before moving on
-5. **Flexible Exit**: Can stop at any point, still prompted for retrospective
+3. **Intelligent Tooling**: Oracle and Librarian invoked at optimal moments
+4. **Pre-emptive Review**: Oracle catches issues BEFORE execution, not after
+5. **Research Integration**: Librarian provides OSS patterns when entering unfamiliar territory
+6. **Continuous Improvement**: Each session builds the lessons library with Oracle-synthesized insights
+7. **No Lost Learnings**: Prompted to capture before moving on
+8. **Flexible Exit**: Can stop at any point, still prompted for retrospective
+
+## Quick Commands During Session
+
+| Command | Action |
+|---------|--------|
+| "continue" | Proceed with suggested action |
+| "lessons" | Show applied learnings again |
+| "status" | Show current progress dashboard |
+| "done" | End session, trigger retrospective |
+| "skip lesson" | Continue without capturing |
+| "ask oracle" | Manually invoke Oracle for current context |
+| "ask librarian" | Manually invoke Librarian for research |
+| "review plan" | Re-run Oracle plan review |
 
 ## Integration Notes
 
@@ -408,3 +623,5 @@ Agent: Creating lesson from session...
 - Lessons stored in `.agents/skills/lessons/` for cross-project sharing
 - Compatible with both interactive and YOLO modes
 - Can be interrupted and resumed - state preserved in STATE.md
+- Oracle is GPT-5 based - best for planning, debugging, and analysis
+- Librarian reads GitHub repos - best for external pattern research
