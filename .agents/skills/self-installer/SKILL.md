@@ -107,10 +107,15 @@ Convex is now configured. Your .env.local should have:
 - CONVEX_DEPLOYMENT=dev:...
 - NEXT_PUBLIC_CONVEX_URL=https://...convex.cloud
 
-Now in your Convex dashboard, go to Settings > Environment Variables and add:
+Now set this deployment as your default project environment:
+1. In your Convex dashboard, go to Settings > Project Settings
+2. Under "Default Deployment", select your dev deployment
+3. This ensures `convex dev` uses the correct deployment by default
+
+Then, still in your Convex dashboard, go to Settings > Environment Variables and add:
 - CLERK_JWT_ISSUER_DOMAIN (same value as in .env.local)
 
-Let me know when you've completed this step.
+Let me know when you've completed these steps.
 ```
 
 Wait for user to respond before proceeding.
