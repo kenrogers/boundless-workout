@@ -4,6 +4,22 @@ A production-ready starter template that gives you everything you need to vibe c
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+---
+
+<div align="center">
+
+### 🚀 Join the Vibe Coders Community
+
+**Learn to build and ship real software with AI—not just prototypes.**
+
+Take the 7 Day Vibe Coding Challenge to learn how to use this template to build anything you want, no coding experience required.
+
+[![Join Free on Skool](https://img.shields.io/badge/Join%20Free-Vibe%20Coders%20Community-7c3aed?style=for-the-badge&logo=discord&logoColor=white)](https://www.skool.com/vibecoders/about)
+
+</div>
+
+---
+
 ## What This Is
 
 The Vibe Coders Starter Kit is created by [Ken Rogers](https://kenrogers.co) as part of the [Vibe Coders](https://skool.com/vibecoders/about) community on Skool.
@@ -24,13 +40,13 @@ Huge thank you to Dr. Allen Harper for providing the inspiration for this. The V
 
 Most vibe coding produces throwaway prototypes. This template is designed to produce **shippable software** by baking in the practices that separate demos from products:
 
-| Practice | How It's Built In |
-|----------|-------------------|
-| **Consistent workflow** | The `/work` command guides every session |
-| **Compound learning** | Lessons accumulate and apply automatically |
+| Practice                | How It's Built In                                            |
+| ----------------------- | ------------------------------------------------------------ |
+| **Consistent workflow** | The `/work` command guides every session                     |
+| **Compound learning**   | Lessons accumulate and apply automatically                   |
 | **Security by default** | Pre-built patterns for auth, CSRF, rate limiting, validation |
-| **Professional design** | Design skill with patterns that avoid generic AI aesthetics |
-| **Real infrastructure** | Auth, payments, real-time database—all wired up |
+| **Professional design** | Design skill with patterns that avoid generic AI aesthetics  |
+| **Real infrastructure** | Auth, payments, real-time database—all wired up              |
 
 ---
 
@@ -49,6 +65,7 @@ npm install
 ### 2. Set Up Services
 
 You'll need accounts for:
+
 - **[Clerk](https://dashboard.clerk.com)** — Authentication and billing
 - **[Convex](https://dashboard.convex.dev)** — Real-time database
 
@@ -102,13 +119,13 @@ Instead of writing prompts from scratch each session, you use a single command t
 
 ### Why This Matters
 
-| Problem | How `/work` Fixes It |
-|---------|----------------------|
-| **Repeating mistakes** | Automatically surfaces past learnings before you start |
-| **Lost context between sessions** | Reads project state and picks up where you left off |
-| **Forgotten lessons** | Prompts you to capture learnings when work completes |
-| **Vague AI prompts** | Plans are structured, executable, and atomic (2-3 tasks max) |
-| **Inconsistent workflow** | Enforces the same proven loop every session |
+| Problem                           | How `/work` Fixes It                                         |
+| --------------------------------- | ------------------------------------------------------------ |
+| **Repeating mistakes**            | Automatically surfaces past learnings before you start       |
+| **Lost context between sessions** | Reads project state and picks up where you left off          |
+| **Forgotten lessons**             | Prompts you to capture learnings when work completes         |
+| **Vague AI prompts**              | Plans are structured, executable, and atomic (2-3 tasks max) |
+| **Inconsistent workflow**         | Enforces the same proven loop every session                  |
 
 ### How It Works
 
@@ -121,15 +138,15 @@ All state is stored in `.planning/` and lessons in `.agents/skills/lessons/`.
 
 ### All Commands
 
-| Command | What It Does |
-|---------|--------------|
-| `/work` | **Unified workflow (recommended)** |
-| `/gsd` | Check status, route to next action |
+| Command        | What It Does                             |
+| -------------- | ---------------------------------------- |
+| `/work`        | **Unified workflow (recommended)**       |
+| `/gsd`         | Check status, route to next action       |
 | `/new-project` | Initialize project with deep questioning |
-| `/roadmap` | Break project into phases |
-| `/plan` | Create PLAN.md (2-3 atomic tasks) |
-| `/execute` | Run plan with atomic commits |
-| `/progress` | Show status and next steps |
+| `/roadmap`     | Break project into phases                |
+| `/plan`        | Create PLAN.md (2-3 atomic tasks)        |
+| `/execute`     | Run plan with atomic commits             |
+| `/progress`    | Show status and next steps               |
 
 ---
 
@@ -170,11 +187,11 @@ The `lessons/` directory starts empty and grows as you work:
 
 Next time you work on something similar, `/work` finds and applies those lessons automatically.
 
-| Timeline | What Happens |
-|----------|--------------|
-| **Week 1** | Empty lessons, learn as you go |
-| **Week 2** | Past lessons surface automatically, work goes faster |
-| **Month 1** | 10+ lessons, most tasks have relevant experience |
+| Timeline    | What Happens                                           |
+| ----------- | ------------------------------------------------------ |
+| **Week 1**  | Empty lessons, learn as you go                         |
+| **Week 2**  | Past lessons surface automatically, work goes faster   |
+| **Month 1** | 10+ lessons, most tasks have relevant experience       |
 | **Month 3** | Institutional knowledge base, onboard new team members |
 
 ---
@@ -183,18 +200,19 @@ Next time you work on something similar, `/work` finds and applies those lessons
 
 ### Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Framework** | Next.js 15 with App Router |
-| **Styling** | TailwindCSS v4 + shadcn/ui |
-| **Database** | Convex (real-time, serverless) |
-| **Auth** | Clerk (users, sessions, social login) |
-| **Payments** | Clerk Billing (subscriptions via Stripe) |
-| **Deployment** | Vercel-ready |
+| Layer          | Technology                               |
+| -------------- | ---------------------------------------- |
+| **Framework**  | Next.js 15 with App Router               |
+| **Styling**    | TailwindCSS v4 + shadcn/ui               |
+| **Database**   | Convex (real-time, serverless)           |
+| **Auth**       | Clerk (users, sessions, social login)    |
+| **Payments**   | Clerk Billing (subscriptions via Stripe) |
+| **Deployment** | Vercel-ready                             |
 
 ### Features
 
 **Infrastructure**
+
 - 🔐 Complete authentication with Clerk
 - 💳 Subscription billing with Clerk Billing
 - 🗄️ Real-time database with Convex
@@ -202,6 +220,7 @@ Next time you work on something similar, `/work` finds and applies those lessons
 - 🚢 One-click Vercel deployment
 
 **Security**
+
 - 🛡️ CSRF protection with HMAC-SHA256
 - 🚦 Rate limiting (IP-based, configurable)
 - ✅ Input validation with Zod + XSS sanitization
@@ -209,6 +228,7 @@ Next time you work on something similar, `/work` finds and applies those lessons
 - 📊 Security monitoring dashboard (admin-only)
 
 **Design & UX**
+
 - 🎨 Custom design system (not generic AI output)
 - 🌗 Dark/Light theme with system awareness
 - 📱 Mobile-first responsive layouts
@@ -216,6 +236,7 @@ Next time you work on something similar, `/work` finds and applies those lessons
 - 🎭 Polished error pages
 
 **Developer Experience**
+
 - ⚡️ Turbopack for fast HMR
 - 📝 TypeScript throughout
 - 🧩 shadcn/ui component library
@@ -341,7 +362,9 @@ export const POST = withCsrf(handler);
 Frontend usage:
 
 ```typescript
-const { csrfToken } = await fetch("/api/csrf", { credentials: "include" }).then(r => r.json());
+const { csrfToken } = await fetch("/api/csrf", { credentials: "include" }).then(
+  (r) => r.json()
+);
 
 await fetch("/api/endpoint", {
   method: "POST",
