@@ -53,11 +53,6 @@ const data = {
       url: "/dashboard",
       icon: IconDashboard,
     },
-    {
-      title: "Payment gated",
-      url: "/dashboard/payment-gated",
-      icon: IconSparkles,
-    },
   ],
   // Admin-only navigation items
   navAdmin: [
