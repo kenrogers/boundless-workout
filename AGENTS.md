@@ -69,7 +69,8 @@ Project planning and execution uses the **Get Shit Done (GSD)** system.
 │  1. LEARN    - Auto-check lessons + Librarian research      │
 │  2. REVIEW   - Oracle reviews plan before execution         │
 │  3. DO       - Route to GSD (Oracle debugs, Librarian helps)│
-│  4. CAPTURE  - Oracle synthesizes retrospective insights    │
+│  4. VERIFY   - Browser test UI with agent-browser           │
+│  5. CAPTURE  - Oracle synthesizes retrospective insights    │
 └─────────────────────────────────────────────────────────────┘
 ```
 

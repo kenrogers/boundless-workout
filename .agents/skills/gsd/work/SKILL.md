@@ -41,13 +41,21 @@ Single entry point for the complete developer workflow. Eliminates the need to r
 ║  │     🔴 RED: Write failing test first                    │ ║
 ║  │     🟢 GREEN: Minimal code to pass                      │ ║
 ║  │     🔵 REFACTOR: Clean up, tests must pass              │ ║
+║  │     🌐 BROWSER: Test UI in browser (if UI relevant)     │ ║
 ║  │     ✓ COMMIT: Test + implementation together            │ ║
 ║  │     🔮 Oracle: Debug failures, review changes           │ ║
 ║  │     📚 Librarian: Research APIs, find patterns          │ ║
+║  │     🔄 HANDOFF: Fresh context after each task           │ ║
 ║  └────────────────────────┬────────────────────────────────┘ ║
 ║                           ▼                                  ║
 ║  ┌─────────────────────────────────────────────────────────┐ ║
-║  │  4. CAPTURE LEARNINGS                                   │ ║
+║  │  4. VERIFY UI (if applicable)                           │ ║
+║  │     🌐 agent-browser: Open page, snapshot, verify       │ ║
+║  │     Only commit after browser test passes               │ ║
+║  └────────────────────────┬────────────────────────────────┘ ║
+║                           ▼                                  ║
+║  ┌─────────────────────────────────────────────────────────┐ ║
+║  │  5. CAPTURE LEARNINGS                                   │ ║
 ║  │     🔮 Oracle: Synthesize insights from session         │ ║
 ║  │     Create retrospective lesson for future sessions     │ ║
 ║  └─────────────────────────────────────────────────────────┘ ║
@@ -220,6 +228,23 @@ Check Project State
 └─ All phases complete → Phase 4 (retrospective)
 ```
 
+#### Domain-Specific Skills
+
+**Load specialized skills based on task context:**
+
+| Task Type | Skill to Load | Triggers |
+|-----------|---------------|----------|
+| **UI/Frontend** | `frontend-design` | design, UI, mockup, landing page, dashboard, component, beautify, style, layout |
+| **Security** | `security-architecture-overview` | auth, CSRF, rate limiting, input validation, security |
+| **Payments** | `payment-security-clerk-billing-stripe` | payment, Stripe, billing, subscription |
+
+**UI Work Flow:**
+When executing tasks involving UI components, pages, or visual design:
+1. Load `frontend-design` skill first
+2. Use `painter` tool to explore visual concepts before coding
+3. Implement code following the skill's design guidelines
+4. Verify in browser before committing
+
 #### TDD Execution Flow (Default for All Features)
 
 **Every feature follows Red-Green-Refactor.** This is non-negotiable.
@@ -253,10 +278,31 @@ Check Project State
 ║  │  4. Run test → Confirm still PASSES                     │ ║
 ║  └────────────────────────┬────────────────────────────────┘ ║
 ║                           ▼                                  ║
-║  ✓ COMMIT                                                    ║
+║  🌐 BROWSER TEST (if UI relevant)                            ║
+║  ┌─────────────────────────────────────────────────────────┐ ║
+║  │  1. Determine if task affects UI (pages, components)    │ ║
+║  │  2. If YES: Run agent-browser verification              │ ║
+║  │     a. Open affected page in browser                    │ ║
+║  │     b. Get interactive snapshot                         │ ║
+║  │     c. Verify expected elements exist                   │ ║
+║  │     d. Test key interactions                            │ ║
+║  │  3. If test fails: Debug with Oracle, fix, re-test      │ ║
+║  │  4. If NO UI impact: Skip browser test                  │ ║
+║  └────────────────────────┬────────────────────────────────┘ ║
+║                           ▼                                  ║
+║  ✓ COMMIT (only after browser test passes)                   ║
 ║  ┌─────────────────────────────────────────────────────────┐ ║
 ║  │  git add -A                                             │ ║
 ║  │  git commit -m "feat: [feature] with tests"             │ ║
+║  └────────────────────────┬────────────────────────────────┘ ║
+║                           ▼                                  ║
+║  🔄 HANDOFF (fresh context for next task)                    ║
+║  ┌─────────────────────────────────────────────────────────┐ ║
+║  │  After each atomic task completion:                     │ ║
+║  │  "Handoff and continue with next task in PLAN.md"       │ ║
+║  │  → Starts fresh thread with relevant context            │ ║
+║  │  → Prevents context degradation over long sessions      │ ║
+║  │  → New thread automatically continues execution         │ ║
 ║  └─────────────────────────────────────────────────────────┘ ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
@@ -290,13 +336,44 @@ Check Project State
 ║  Running tests... ✓ PASS                                     ║
 ╚══════════════════════════════════════════════════════════════╝
 
+╔══════════════════════════════════════════════════════════════╗
+║  🌐 BROWSER TEST: User Profile Page                          ║
+╠══════════════════════════════════════════════════════════════╣
+║  Page: http://localhost:3000/profile                         ║
+║                                                              ║
+║  Verifying elements:                                         ║
+║  ✓ User name displayed (@e1)                                 ║
+║  ✓ Email displayed (@e2)                                     ║
+║  ✓ Avatar loaded (@e3)                                       ║
+║  ✓ Loading skeleton renders correctly                        ║
+║                                                              ║
+║  Result: ✅ PASS                                             ║
+╚══════════════════════════════════════════════════════════════╝
+
 ✓ Committed: "feat: add user profile page with tests"
 ```
 
-#### Oracle & Librarian During TDD
+#### Oracle, Librarian & Browser Testing During TDD
 
 ```
+BROWSER TEST TRIGGERS:
+├─ Task modifies app/ pages or routes → Run browser test
+├─ Task modifies components/ UI components → Run browser test
+├─ Task adds user-facing features → Run browser test
+├─ Task changes styling or layout → Run browser test
+├─ Backend-only change (convex/) → Skip browser test
+├─ Config/docs only → Skip browser test
+
+BROWSER TEST COMMANDS:
+├─ agent-browser open http://localhost:3000/[page]
+├─ agent-browser snapshot -i    (get interactive elements)
+├─ agent-browser click @e[n]    (click element by ref)
+├─ agent-browser fill @e[n] "text"  (fill input)
+├─ agent-browser is visible "[selector]"
+├─ agent-browser screenshot [path]
+
 ORACLE TRIGGERS:
+├─ Browser test fails → "Consulting Oracle to debug UI issue..."
 ├─ Test fails after GREEN phase → "Consulting Oracle to debug..."
 ├─ TypeScript errors persist → "Asking Oracle to analyze..."
 ├─ Unclear how to test something → "Oracle: how should I test this?"
@@ -306,6 +383,43 @@ LIBRARIAN TRIGGERS:
 ├─ New testing pattern needed → "How does [library] test this?"
 ├─ Unfamiliar API to test → "Researching test patterns for [API]..."
 └─ Best practice question → "How do established projects test this?"
+
+HANDOFF TRIGGERS:
+├─ After EVERY atomic task + commit → Handoff to continue with next task
+├─ Preserves fresh context for each task
+└─ Prevents quality degradation in long sessions
+```
+
+#### Intelligent Handoff After Each Task
+
+**Every atomic task completion triggers a handoff.** This is a key feature:
+
+```
+Task Complete → Commit → Handoff → New Thread Continues
+```
+
+After committing, the agent says:
+```
+"Handoff and continue with next task [N] in PLAN.md: [task description]"
+```
+
+**Why handoff after each task?**
+- Context window fills up during long sessions
+- Quality degrades at 50%+ context usage
+- Fresh thread = fresh reasoning capability
+- Each task gets full attention without accumulated noise
+
+**What gets preserved in handoff:**
+- Current phase and task progress (from STATE.md)
+- Applied lessons from this session
+- Commit history for the phase
+- Any unresolved issues or notes
+
+**Handoff pattern examples:**
+```
+"Handoff and continue with Task 2: implement user profile query"
+"Handoff and execute next task in Phase 03"
+"Handoff and verify the UI changes we just made"
 ```
 
 #### Test-First Principles
@@ -621,6 +735,13 @@ Agent: Executing Task 1: Add core feature component...
        ✓ Verification passed (npx tsc --noEmit)
        ✓ Committed: abc1234 "feat: add core feature component"
        
+       🔄 Handoff and continue with Task 2: implement data layer...
+       
+--- NEW THREAD ---
+
+Agent: Continuing work session from handoff...
+       Reading STATE.md for current progress...
+       
        Executing Task 2: Implement data layer...
        ✗ TypeScript error: Property 'createdAt' does not exist
        
@@ -637,6 +758,12 @@ Agent: Executing Task 1: Add core feature component...
        ✓ Schema updated with correct field
        ✓ Verification passed (npx tsc --noEmit)
        ✓ Committed: def5678 "feat: implement feature data layer"
+       
+       🔄 Handoff and continue with Task 3: add UI integration...
+       
+--- NEW THREAD ---
+
+Agent: Continuing work session from handoff...
        
        Executing Task 3: Add UI integration...
        (Applying Oracle suggestion: adding error boundary)
@@ -692,6 +819,7 @@ Agent: I'm going to consult the Oracle to synthesize learnings...
 6. **Continuous Improvement**: Each session builds the lessons library with Oracle-synthesized insights
 7. **No Lost Learnings**: Prompted to capture before moving on
 8. **Flexible Exit**: Can stop at any point, still prompted for retrospective
+9. **Fresh Context Per Task**: Intelligent handoff after each atomic commit prevents context degradation
 
 ## Quick Commands During Session
 
@@ -705,6 +833,7 @@ Agent: I'm going to consult the Oracle to synthesize learnings...
 | "ask oracle" | Manually invoke Oracle for current context |
 | "ask librarian" | Manually invoke Librarian for research |
 | "review plan" | Re-run Oracle plan review |
+| "handoff" | Manually trigger handoff to fresh thread |
 
 ## Integration Notes
 
@@ -714,3 +843,4 @@ Agent: I'm going to consult the Oracle to synthesize learnings...
 - Can be interrupted and resumed - state preserved in STATE.md
 - Oracle is GPT-5 based - best for planning, debugging, and analysis
 - Librarian reads GitHub repos - best for external pattern research
+- Handoff after each task uses Amp's intelligent handoff feature (see https://ampcode.com/news/ask-to-handoff)
