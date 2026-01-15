@@ -18,6 +18,37 @@ export default defineSchema({
       .index("byUserId", ["userId"])
       .index("byPayerUserId", ["payer.user_id"]),
 
+    // 14-day workout program template (static data)
+    workouts: defineTable({
+      day: v.number(), // 1-14
+      order: v.number(), // workout order within day
+      name: v.string(),
+      description: v.string(),
+      duration: v.optional(v.string()),
+      isOptional: v.boolean(),
+    })
+      .index("by_day_order", ["day", "order"]),
+
+    // User's workout completion records
+    workoutLogs: defineTable({
+      userId: v.id("users"),
+      date: v.string(), // YYYY-MM-DD
+      workoutId: v.id("workouts"),
+      completed: v.boolean(),
+      completedAt: v.optional(v.number()), // timestamp
+      notes: v.optional(v.string()),
+    })
+      .index("by_user_date", ["userId", "date"])
+      .index("by_user_date_workout", ["userId", "date", "workoutId"]),
+
+    // Program configuration per user
+    programConfig: defineTable({
+      userId: v.id("users"),
+      startDate: v.string(), // YYYY-MM-DD
+      timezone: v.optional(v.string()), // e.g., "America/Los_Angeles"
+    })
+      .index("by_user", ["userId"]),
+
     // Security monitoring table
     // userId is optional to allow logging violations from unauthenticated requests
     securityEvents: defineTable({
