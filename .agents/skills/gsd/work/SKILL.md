@@ -45,6 +45,7 @@ Single entry point for the complete developer workflow. Eliminates the need to r
 ║  │     ✓ COMMIT: Test + implementation together            │ ║
 ║  │     🔮 Oracle: Debug failures, review changes           │ ║
 ║  │     📚 Librarian: Research APIs, find patterns          │ ║
+║  │     🔄 HANDOFF: Fresh context after each task           │ ║
 ║  └────────────────────────┬────────────────────────────────┘ ║
 ║                           ▼                                  ║
 ║  ┌─────────────────────────────────────────────────────────┐ ║
@@ -276,6 +277,15 @@ Check Project State
 ║  ┌─────────────────────────────────────────────────────────┐ ║
 ║  │  git add -A                                             │ ║
 ║  │  git commit -m "feat: [feature] with tests"             │ ║
+║  └────────────────────────┬────────────────────────────────┘ ║
+║                           ▼                                  ║
+║  🔄 HANDOFF (fresh context for next task)                    ║
+║  ┌─────────────────────────────────────────────────────────┐ ║
+║  │  After each atomic task completion:                     │ ║
+║  │  "Handoff and continue with next task in PLAN.md"       │ ║
+║  │  → Starts fresh thread with relevant context            │ ║
+║  │  → Prevents context degradation over long sessions      │ ║
+║  │  → New thread automatically continues execution         │ ║
 ║  └─────────────────────────────────────────────────────────┘ ║
 ║                                                              ║
 ╚══════════════════════════════════════════════════════════════╝
@@ -356,6 +366,43 @@ LIBRARIAN TRIGGERS:
 ├─ New testing pattern needed → "How does [library] test this?"
 ├─ Unfamiliar API to test → "Researching test patterns for [API]..."
 └─ Best practice question → "How do established projects test this?"
+
+HANDOFF TRIGGERS:
+├─ After EVERY atomic task + commit → Handoff to continue with next task
+├─ Preserves fresh context for each task
+└─ Prevents quality degradation in long sessions
+```
+
+#### Intelligent Handoff After Each Task
+
+**Every atomic task completion triggers a handoff.** This is a key feature:
+
+```
+Task Complete → Commit → Handoff → New Thread Continues
+```
+
+After committing, the agent says:
+```
+"Handoff and continue with next task [N] in PLAN.md: [task description]"
+```
+
+**Why handoff after each task?**
+- Context window fills up during long sessions
+- Quality degrades at 50%+ context usage
+- Fresh thread = fresh reasoning capability
+- Each task gets full attention without accumulated noise
+
+**What gets preserved in handoff:**
+- Current phase and task progress (from STATE.md)
+- Applied lessons from this session
+- Commit history for the phase
+- Any unresolved issues or notes
+
+**Handoff pattern examples:**
+```
+"Handoff and continue with Task 2: implement user profile query"
+"Handoff and execute next task in Phase 03"
+"Handoff and verify the UI changes we just made"
 ```
 
 #### Test-First Principles
@@ -671,6 +718,13 @@ Agent: Executing Task 1: Add core feature component...
        ✓ Verification passed (npx tsc --noEmit)
        ✓ Committed: abc1234 "feat: add core feature component"
        
+       🔄 Handoff and continue with Task 2: implement data layer...
+       
+--- NEW THREAD ---
+
+Agent: Continuing work session from handoff...
+       Reading STATE.md for current progress...
+       
        Executing Task 2: Implement data layer...
        ✗ TypeScript error: Property 'createdAt' does not exist
        
@@ -687,6 +741,12 @@ Agent: Executing Task 1: Add core feature component...
        ✓ Schema updated with correct field
        ✓ Verification passed (npx tsc --noEmit)
        ✓ Committed: def5678 "feat: implement feature data layer"
+       
+       🔄 Handoff and continue with Task 3: add UI integration...
+       
+--- NEW THREAD ---
+
+Agent: Continuing work session from handoff...
        
        Executing Task 3: Add UI integration...
        (Applying Oracle suggestion: adding error boundary)
@@ -742,6 +802,7 @@ Agent: I'm going to consult the Oracle to synthesize learnings...
 6. **Continuous Improvement**: Each session builds the lessons library with Oracle-synthesized insights
 7. **No Lost Learnings**: Prompted to capture before moving on
 8. **Flexible Exit**: Can stop at any point, still prompted for retrospective
+9. **Fresh Context Per Task**: Intelligent handoff after each atomic commit prevents context degradation
 
 ## Quick Commands During Session
 
@@ -755,6 +816,7 @@ Agent: I'm going to consult the Oracle to synthesize learnings...
 | "ask oracle" | Manually invoke Oracle for current context |
 | "ask librarian" | Manually invoke Librarian for research |
 | "review plan" | Re-run Oracle plan review |
+| "handoff" | Manually trigger handoff to fresh thread |
 
 ## Integration Notes
 
@@ -764,3 +826,4 @@ Agent: I'm going to consult the Oracle to synthesize learnings...
 - Can be interrupted and resumed - state preserved in STATE.md
 - Oracle is GPT-5 based - best for planning, debugging, and analysis
 - Librarian reads GitHub repos - best for external pattern research
+- Handoff after each task uses Amp's intelligent handoff feature (see https://ampcode.com/news/ask-to-handoff)
