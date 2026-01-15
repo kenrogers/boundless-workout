@@ -228,6 +228,23 @@ Check Project State
 └─ All phases complete → Phase 4 (retrospective)
 ```
 
+#### Domain-Specific Skills
+
+**Load specialized skills based on task context:**
+
+| Task Type | Skill to Load | Triggers |
+|-----------|---------------|----------|
+| **UI/Frontend** | `frontend-design` | design, UI, mockup, landing page, dashboard, component, beautify, style, layout |
+| **Security** | `security-architecture-overview` | auth, CSRF, rate limiting, input validation, security |
+| **Payments** | `payment-security-clerk-billing-stripe` | payment, Stripe, billing, subscription |
+
+**UI Work Flow:**
+When executing tasks involving UI components, pages, or visual design:
+1. Load `frontend-design` skill first
+2. Use `painter` tool to explore visual concepts before coding
+3. Implement code following the skill's design guidelines
+4. Verify in browser before committing
+
 #### TDD Execution Flow (Default for All Features)
 
 **Every feature follows Red-Green-Refactor.** This is non-negotiable.
