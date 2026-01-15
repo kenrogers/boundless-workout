@@ -1,5 +1,6 @@
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
+import { calculateCycleDay, getTodayString } from "./lib/dateUtils";
 
 /**
  * Get or create program config for current user
@@ -91,32 +92,7 @@ export const setStartDate = mutation({
   },
 });
 
-/**
- * Calculate which day of the 14-day cycle we're on
- */
-function calculateCycleDay(startDate: string, today: string): number {
-  const start = new Date(startDate + "T00:00:00");
-  const current = new Date(today + "T00:00:00");
-  
-  const diffTime = current.getTime() - start.getTime();
-  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-  
-  // Handle case where today is before start date
-  if (diffDays < 0) {
-    return 1;
-  }
-  
-  // Cycle through days 1-14 (not 0-13)
-  return (diffDays % 14) + 1;
-}
-
-/**
- * Get today's date as YYYY-MM-DD
- */
-function getTodayString(): string {
-  const now = new Date();
-  return now.toISOString().split("T")[0];
-}
+// calculateCycleDay and getTodayString imported from lib/dateUtils
 
 /**
  * Get today's workouts with completion status
