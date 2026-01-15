@@ -15,6 +15,7 @@ import type * as paymentAttempts from "../paymentAttempts.js";
 import type * as security from "../security.js";
 import type * as seedSecurityEvents from "../seedSecurityEvents.js";
 import type * as users from "../users.js";
+import type * as workouts from "../workouts.js";
 
 import type {
   ApiFromModules,
@@ -30,6 +31,7 @@ declare const fullApi: ApiFromModules<{
   security: typeof security;
   seedSecurityEvents: typeof seedSecurityEvents;
   users: typeof users;
+  workouts: typeof workouts;
 }>;
 
 /**
