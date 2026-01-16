@@ -8,8 +8,5 @@ export default defineConfig({
         inline: ["convex", "convex-test"],
       },
     },
-    // Run tests sequentially to prevent state leakage
-    maxWorkers: 1,
-    minWorkers: 1,
   },
 });

@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["vitest/importMeta", "vitest/globals", "vite/client"]
+  },
+  "include": ["./**/*.test.ts", "./testHelpers.ts"],
+  "exclude": ["./_generated"]
+}
